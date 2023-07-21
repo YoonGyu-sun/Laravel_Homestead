@@ -7,10 +7,32 @@
     
         <label class="block" for="title">Title이 부분에 카테고리 넣으면될 거 같음</label>
         <div class=" block w-full">
+            <div class="flex items-center">
             {{-- title --}}
             <input class="@error('title') border border-red-700 @enderror" type="text" name="title" id="title" value="{{ old('title',$management->title) }}">
-            {{-- type --}}
-            <input class="@error('type') border border-red-700 @enderror" type="text" name="type" id="type" value="{{ old('type',$management->type) }}">
+            {{-- type drop down --}}
+                        <!-- 변경된 부분 -->
+                        <div class="flex items-center ml-10 relative">
+                            <select id="categorySelect" onchange="category_button()" name="type">
+                                <option value="{{ old('type',$management->type) }}" disabled selected>{{ old('type',$management->type) }}</option>
+                                <!-- 선택할 수 있는 옵션 목록을 생성합니다. -->
+                                @foreach ($categorys as $category)
+                                    <option value="{{ $category->cat_name }}">{{ $category->cat_name }}</option>
+                                @endforeach
+                            </select>
+                            <script>
+                                function category_button() {
+                                    // 선택된 값을 가져오는 방식은 이전과 동일하게 구현합니다.
+                                    var selectedCategory = document.getElementById('categorySelect').value;
+                                    // 이후에 선택된 값을 사용하여 필요한 작업을 수행하면 됩니다.
+                                    // 예: 선택된 값으로 폼 제출 또는 다른 동작 수행 등
+                                    console.log(selectedCategory);
+                                }
+                            </script>
+                        </div>        
+                    </div>
+                    {{-- drop down --}}
+
         </div>        
             <textarea
             name="body"

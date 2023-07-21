@@ -4,7 +4,7 @@
         <form method="POST" action="{{ route('tasks.store') }}">
             @csrf
              <textarea
-                name="message"
+                name="message"{{ Auth::user()->name }}
                 placeholder="{{ __('글 작성란') }}"
                 class="block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm @error('message') border border-red-700 @enderror"
             >{{ old('message') }}</textarea>
@@ -58,7 +58,7 @@
                         </div>
                         <p class="mt-4 text-lg text-gray-900">
                             @if(strlen($task->message) > 18)
-                                {{ mb_substr($task->message, 0,18) }}...
+                                {{ mb_substr($task->message, 0,18) }} ···
                             @else
                                 {{ $task->message }}
                             @endif

@@ -5,22 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Laravel\Scout\Searchable;  // 라라벨 9버전 Scout, phpartisan 설치
+
+
+
+
 
 class Management extends Model
 {
     use HasFactory;
-    protected $table = 'managements'; //이 값을 안넣으면 insert management로 들어감
+    use Searchable;
     
-        protected $fillable = [
-            'user_id', 'title', 'body', 'type'
-        ];
-        //user_id는 외래키로해서 user와 연동해야할듯/
-
+    protected $fillable = [
+        'user_id', 'title', 'body', 'type'
+    ]; // 그냥 DB 호출
         public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
-    }
-
-        
+        return $this->belongsTo(User::class); //이거 뭔지 모름
+    }    
+    protected $table = 'managements'; // index.blade.php에서  count개수를 구하기 위해 auth와 managemets를 따로 불러옴
     
 }
