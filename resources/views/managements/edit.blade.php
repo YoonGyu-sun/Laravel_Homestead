@@ -34,15 +34,27 @@
                     {{-- drop down --}}
 
         </div>        
-            <textarea
-            name="body"
-            class="block w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm @error('body') border border-red-700 @enderror"
-        >{{ old('body',$management->body) }}</textarea>
+            <p><textarea class ="h-1/2"  name="body" id="body">
+        {{ strip_tags(old('body',$management->body)) }}</textarea></p>
+        {{ csrf_field() }}
         <x-input-error :messages="$errors->get('body')" class="mt-2" />
             <div class="mt-4 float-right">
                 <x-primary-button>{{ __('저장') }}</x-primary-button>
                 <a class="text-sm text-gray-900 font-semibold p-4 mr-12 ml-2 " href="{{ route('tasks.index') }}">{{ __('취소') }}</a>
             </div>
     </form>
+    
+<script src={{ asset('ckeditor/ckeditor.js') }}></script>
+
+<script>
+    ClassicEditor
+            .create( document.querySelector( '#body' ) )
+            .catch( error => {
+                console.error( error );
+            } );
+</script>
+
+
+{{--  --}}
     
 </x-app-layout>

@@ -22,7 +22,7 @@
     {{-- body --}}
     @section('qq')
         <div>
-            {{ old('body',$management->body) }}
+            {{ strip_tags(old('body',$management->body)) }}
         <div>    
 
     @endsection

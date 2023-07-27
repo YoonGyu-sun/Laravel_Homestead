@@ -20,9 +20,12 @@
                                 <form action="{{ route('managements.index') }}" method="GET" id="categoryForm">
                                     <select id="categorySelect"  name="p" onchange="category_button()">
                                         <option value="" disabled selected class>구분</option>
+                                        
                                         <!-- 선택할 수 있는 옵션 목록을 생성합니다. -->
                                         @foreach ($categorys as $category)
-                                            <option value="{{ $category->cat_name }}">{{ $category->cat_name }}</option>
+                                            @if($category->user->is(auth()->user()))
+                                                <option value="{{ $category->cat_name }}">{{ $category->cat_name }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                     
@@ -31,8 +34,7 @@
                         </div>
                         <script>
                             function category_button(){
-                                document.getElementById("categoryForm").submit();
-                                
+                                document.getElementById("categoryForm").submit();            
                             }
                         </script>
                 
@@ -50,7 +52,7 @@
             
             {{-- dropdown --}}
         
-                @foreach ($managements->take(20) as $management)
+                @foreach ($managements->take(10) as $management)
                     @if($management->user->is(auth()->user()))
                         <div class="bg-white w-8/12 border border-gray-300 items-center flex p-6" onmouseenter="showButtons(this)" onmouseleave="hideButtons(this)">
                                 <div>

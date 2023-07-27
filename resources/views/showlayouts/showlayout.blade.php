@@ -36,11 +36,11 @@
 
     <!-- Main Content Area -->
     <main class="w-3/5 bg-white">
-    <div class="bg-gray-100 p-4">
-      <h2 class="text-xl font-bold mb-4">@yield('title1')</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac justo sit amet dui facilisis aliquet. Vestibulum quis lectus nec nibh euismod euismod at non nisi. Etiam ultrices, tortor at ultricies venenatis, tortor sapien pharetra justo, id tincidunt tellus enim eu nunc.</p>
+    <div class="bg-gray-100 p-4 h-20">
+      <h2 class="text-xl font-bold mb-4 text-center">@yield('title1')</h2>
+      
     </div>
-    <div>
+    <div class="p-16">
         @yield('qq')
     </div>
     </main>
