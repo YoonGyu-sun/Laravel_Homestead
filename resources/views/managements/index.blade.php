@@ -12,13 +12,17 @@
         <div class="grid place-items-center w-full">   {{-- 전체 div --}}
             <div class="bg-white w-8/12 p-5 flex border border-gray-300 items-center mb-4">
                 <div class="text-sm">
-                    <input type="checkbox" name="all_chk" value="1" class="w-3 h-3">  전체선택
+                    <form action="/delete-users" method="POST">
+                        @csrf
+                        {{-- @method('delete') --}}
+                        <x-primary-button id="DeleteButton" name="DeleteButton" class="text-sm" onclick="del()">선택 삭제</x-primary-button>
+                    </form>
                 </div>
             
                     {{-- dropdown --}}                
                         <div class="flex items-center ml-auto relative">
                                 <form action="{{ route('managements.index') }}" method="GET" id="categoryForm">
-                                    <select id="categorySelect"  name="p" onchange="category_button()">
+                                    <select id="categorySelect" name="p" onchange="category_button()" class="w-32 px-2 py-1 border border-gray-300 rounded ">
                                         <option value="" disabled selected class>구분</option>
                                         
                                         <!-- 선택할 수 있는 옵션 목록을 생성합니다. -->
@@ -27,36 +31,76 @@
                                                 <option value="{{ $category->cat_name }}">{{ $category->cat_name }}</option>
                                             @endif
                                         @endforeach
-                                    </select>
-                                    
-                                    
+                                    </select>    
                                 </form>
                         </div>
                         <script>
                             function category_button(){
                                 document.getElementById("categoryForm").submit();            
                             }
+                        // 전체선택 클릭시 체크박스 all, 전체 버튼 remove, add (hidden)
+                            function all_chk(selectAll){
+                                const checkbox = document.getElementsByName('ids');
+                                checkbox.forEach((checkbox) => {
+                                    checkbox.checked = selectAll.checked;
+                                });
+                            }
+
+                            function del() {
+                                var selectedValues = getCheckedValues();
+                                if (selectedValues.length === 0) {
+                                    alert('선택된 항목이 없습니다.');
+                                } else {
+                                    console.log(selectedValues);
+                                    document.getElementById('selectedValues').value = selectedValues.join(',');
+                                                
+                                    // 폼을 제출합니다.
+                                    document.getElementById('DeleteButton').form.submit();
+                                }
+                            }
+                        
+                            function getCheckedValues() {
+                                var checkboxes = document.getElementsByName('ids');
+                                var checkedValues = [];
+                            
+                                for (var i = 0; i < checkboxes.length; i++) {
+                                    if (checkboxes[i].checked) {
+                                        checkedValues.push(checkboxes[i].value);
+                                    }
+                                }
+                            
+                                return checkedValues;
+                            }
                         </script>
                 
                     {{-- 검색 text --}}
                     <div class="ml-2">
                         <form action="{{ route('managements.index') }}" method="GET"> 
-                            <input class="w-full focus:outline-none text-xs" type="text" placeholder="검색" name="q">
-                            <button type="submit" class="border border-gray-500">전송</button>
+                            <input class="w-40 focus:outline-none text-xs" type="text" placeholder="검색" name="q">
+                            <button type="submit" class="border border-gray-500 text-sm">검색</button>
                         </form>
                     
                     </div>
                     {{-- 검색 text --}}
             </div>
-        
+            <div class="grid place-items-center w-full">   {{-- 전체 div --}}
+                <div class="bg-white w-8/12 p-5 flex border border-gray-300 items-center mb-4 h-10">
+                    <div class="text-sm">
+                        <input type="checkbox" id="all_chk" name="all_chk" onclick="all_chk(this)" class="w-3 h-3"/>  전체선택
+                        
+                    </div>
+                </div>
+            </div>
+
+            
             
             {{-- dropdown --}}
-        
+            
                 @foreach ($managements->take(10) as $management)
                     @if($management->user->is(auth()->user()))
                         <div class="bg-white w-8/12 border border-gray-300 items-center flex p-6" onmouseenter="showButtons(this)" onmouseleave="hideButtons(this)">
                                 <div>
-                                    <input type="checkbox" name="all_chk" value="1" class="w-3 h-3">
+                                    <input type="checkbox" name="ids" value="{{ $management->id }}" class="w-3 h-3">
                                 </div>
 
                                 <div class="ml-4 font-bold" onmouseenter="titleUnder(this)" onmouseleave="titleNone(this)">
@@ -72,7 +116,7 @@
                                 <form action="{{ route('managements.destroy', $management) }}" method="POST">
                                         @csrf
                                         @method('delete')
-                                        <button class="border border-gray-400 p-1 rounded hidden" onclick="return confirm('삭제하시겠습니까?')" window.location.href = '{{ route('managements.destroy', $management) }}'>{{ __('삭제') }}</button>
+                                        <button class="border border-gray-400 p-1 rounded hidden" onclick="return confirm('삭제하시겠습니까?')" >{{ __('삭제') }}</button>
                                     </form>
                                 </div>                    
                         </div>

@@ -22,38 +22,35 @@ class ManagementController extends Controller
         $count=0;                          
         $p = $request->input('p');
         $q = $request->input('q');
-        
-        
 
         if(Auth::check()){
             $userId=Auth::user()->id;
-            $count = DB::table('managements')
-            ->where('user_id', Auth::user()->id)
-            ->count(); 
+            $count = Management::where('user_id', Auth::user()->id)->count();
+            
         }  // 설명 ->table에서 managements값 불러오고 auth를 이용해 인증된 사람의 게시물 카운트
 
         // 검색어가 있는 경우, title 컬럼에 대해 like 검색을 수행합니다.
-
         $query = Management::with('user')->latest();
 
     if($p!=null){
-        $query->when($p, function ($query, $p) {
+       $query = $query->when($p, function ($query, $p) {
             return $query->where('type', 'like', "%$p%");
         });
         } else {
-            $query->when($q, function ($query, $q) {
+           $query = $query->when($q, function ($query, $q) {
                 return $query->where('title', 'like', "%$q%")
                 ->orWhere('body', 'like', "%$q%");
             });
         }
-        
-        
+
         $managements=$query->get();
+        
+        $categorys = Category::with('user')->get();
 
         return view('managements.index',[
             'managements' =>$managements,
             'count'=>$count,
-            'categorys' =>Category::with('user')->get(), // Category에서 갖고옴
+            'categorys' => $categorys, // Category에서 갖고옴
         ]);   
     }  
 
@@ -120,7 +117,18 @@ class ManagementController extends Controller
     {
         $this->authorize('delete', $management);
         $management->delete();
+
+        
         return redirect(route('managements.index'));
     }
+
+
+    public function deleteUsers(Request $request)
+    {
+        print_r($request->selectValues);
+        
+    }   
+    
+    
 }
 

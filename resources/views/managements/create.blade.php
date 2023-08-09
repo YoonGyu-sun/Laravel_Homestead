@@ -9,15 +9,15 @@
     </style>
     <form method="POST" action="{{ route('managements.store') }}">
     @csrf
-        <label class="block" for="title">Title이 부분에 카테고리 넣으면될 거 같음</label>
-            <div class="flex items-center">
-                <input class="@error('title') border border-red-700 @enderror" type="text" name="title" id="title" placeholder="{{ __('제목을 입력하세요') }}" required value="{{ old('title')? old('title'):'' }}">
+        
+            <div class="flex items-center border-t border-gray-500">
+                <input type="text" name="title" id="title" placeholder="{{ __('') }}" required value="{{ old('title')? old('title'):'' }}" class="@error('title') border border-red-700 @enderror w-full h-32 text-lg border border-gray-200 mb-5">
                     
                 {{-- drop down --}}
                         <!-- 변경된 부분 -->
                         <div class="flex items-center ml-10 relative">
-                            <select id="categorySelect" onchange="category_button()" name="type">
-                                <option value="" disabled selected>구분</option>
+                            <select id="categorySelect" onchange="category_button()" name="type" class="w-32 px-2 py-1 border border-gray-300 rounded sm:hidden lg:inline">
+                                <option value="" disabled selected >구분</option>
                                 <!-- 선택할 수 있는 옵션 목록을 생성합니다. -->
                                 @foreach ($categorys as $category)
                                     @if($category->user->is(auth()->user()))
@@ -36,7 +36,7 @@
             
 
             {{-- CKeditor 사용 --}}
-                <p><textarea class ="h-1/2"  name="body" id="body"></textarea></p>
+                <p><textarea class ="h-3/4"  name="body" id="body"></textarea></p>
                 {{ csrf_field() }}
 
             <x-primary-button class="mt-4 float-right"> {{ __('완료') }} </x-primary-button>
@@ -83,21 +83,7 @@
 
 
 
-
-
-
-
-
-
-
-
 {{-- mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm --}}
-
-
-
-
-
-
 
 
 

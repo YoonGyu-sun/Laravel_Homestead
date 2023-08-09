@@ -33,6 +33,10 @@ use App\Http\Controllers\CategoryController;
         ->only(['index','create', 'show', 'store', 'edit', 'update', 'destroy'])
         ->middleware(['auth', 'verified']);
     
+    // Route::get('/ditto', [ManagementController::class, 'latest']);
+    Route::post('/delete-users', [ManagementController::class, 'deleteUsers']);
+    
+
     // 카테고리 
     Route::resource('categorys', CategoryController::class)
         ->only(['index', 'store', 'edit', 'update', 'destroy'])
