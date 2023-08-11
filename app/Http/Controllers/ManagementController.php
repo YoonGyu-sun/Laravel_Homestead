@@ -23,15 +23,14 @@ class ManagementController extends Controller
         $p = $request->input('p');
         $q = $request->input('q');
 
+        // 설명 ->table에서 managements값 불러오고 auth를 이용해 인증된 사람의 게시물 카운트
         if(Auth::check()){
             $userId=Auth::user()->id;
             $count = Management::where('user_id', Auth::user()->id)->count();
-            
-        }  // 설명 ->table에서 managements값 불러오고 auth를 이용해 인증된 사람의 게시물 카운트
+        }  
 
         // 검색어가 있는 경우, title 컬럼에 대해 like 검색을 수행합니다.
         $query = Management::with('user')->latest();
-
     if($p!=null){
        $query = $query->when($p, function ($query, $p) {
             return $query->where('type', 'like', "%$p%");
@@ -43,17 +42,21 @@ class ManagementController extends Controller
             });
         }
 
-        $managements=$query->get();
+        // 카테고리 갖고오기
         
         $categorys = Category::with('user')->get();
+        $managements = $query->orderByDesc('id')->paginate(5);
+        $managements->appends(['p' => $p, 'q' => $q]);
+        
+        
 
         return view('managements.index',[
+            compact('managements'),
             'managements' =>$managements,
             'count'=>$count,
             'categorys' => $categorys, // Category에서 갖고옴
         ]);   
     }  
-
     
     public function create(): View
     {
@@ -123,12 +126,13 @@ class ManagementController extends Controller
     }
 
 
-    public function deleteUsers(Request $request)
+    public function deleteUsers(Request $request, Management $management): RedirectResponse
     {
-        print_r($request->selectValues);
-        
+        $selectedValues = json_decode($request->input('selectedValues'));
+        foreach ($selectedValues as $id){
+            Management::find($id)->delete();
+        }
+        return redirect(route('managements.index'));
     }   
-    
-    
 }
 

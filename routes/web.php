@@ -34,7 +34,7 @@ use App\Http\Controllers\CategoryController;
         ->middleware(['auth', 'verified']);
     
     // Route::get('/ditto', [ManagementController::class, 'latest']);
-    // Route::post('/delete-users', [ManagementController::class, 'deleteUsers']);
+    Route::post('/delete-users', [ManagementController::class, 'deleteUsers']);
     
 
     // 카테고리 
